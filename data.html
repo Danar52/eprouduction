@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Data Produksi</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         * {
@@ -32,35 +33,32 @@
         h2 {
             text-align: center;
             color: #2c3e50;
+            margin-bottom: 20px;
         }
 
-        input,
-        select,
-        textarea {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            border-radius: 8px;
+        .filter {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .filter input[type="date"] {
+            flex: 1;
+            padding: 10px;
+            border-radius: 6px;
             border: 1px solid #ccc;
-            transition: all 0.3s;
-        }
-
-        input:focus,
-        select:focus,
-        textarea:focus {
-            border-color: #3498db;
-            outline: none;
         }
 
         .btn {
-            padding: 12px 20px;
+            padding: 8px 14px;
             border: none;
-            border-radius: 8px;
+            border-radius: 6px;
             background-color: #3498db;
             color: white;
-            font-size: 16px;
+            font-size: 14px;
             cursor: pointer;
-            margin-right: 10px;
             transition: background-color 0.3s;
         }
 
@@ -69,11 +67,11 @@
         }
 
         .btn.secondary {
-            background-color: #7f8c8d;
+            background-color: #aa0000;
         }
 
         .btn.secondary:hover {
-            background-color: #626c70;
+            background-color: #ff3232;
         }
 
         .link-btn {
@@ -95,7 +93,7 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 30px;
+            margin-top: 20px;
         }
 
         th,
@@ -184,6 +182,74 @@
                 opacity: 0;
             }
         }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px 15px;
+            }
+
+            h2 {
+                font-size: 20px;
+            }
+
+            .filter {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filter input[type="date"],
+            .btn {
+                width: 100%;
+                font-size: 14px;
+                padding: 10px;
+            }
+
+            table,
+            thead,
+            tbody,
+            th,
+            td,
+            tr {
+                display: block;
+            }
+
+            thead {
+                display: none;
+            }
+
+            tr {
+                margin-bottom: 15px;
+                background: #fff;
+                border-radius: 8px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+                padding: 10px;
+            }
+
+            td {
+                text-align: left;
+                padding: 8px 10px;
+                position: relative;
+                font-size: 14px;
+            }
+
+            td::before {
+                content: attr(data-label);
+                font-weight: bold;
+                display: block;
+                margin-bottom: 4px;
+                color: #3498db;
+            }
+
+            .link-btn {
+                font-size: 14px;
+                padding: 10px;
+            }
+
+            .toast {
+                font-size: 14px;
+                padding: 12px;
+            }
+        }
     </style>
 </head>
 
@@ -212,22 +278,19 @@
     </div>
 
     <div class="loader" id="loader"></div>
-
     <div class="toast" id="toast"></div>
 
     <script>
         const scriptURL = 'https://script.google.com/macros/s/AKfycbyiROy2XE5ComF7hLBRZazop6KJD8lj6adjBYhbMtIBYnZIDIwvWT24qu6FrxMNB7WU/exec';
 
-        // Fungsi untuk memformat tanggal menjadi YYYY-MM-DD
         function formatDate(date) {
             const d = new Date(date);
             const year = d.getFullYear();
-            const month = ("0" + (d.getMonth() + 1)).slice(-2); // Bulan mulai dari 0, jadi +1
+            const month = ("0" + (d.getMonth() + 1)).slice(-2);
             const day = ("0" + d.getDate()).slice(-2);
             return `${year}-${month}-${day}`;
         }
 
-        // Menampilkan Toast Notification
         function showToast(message) {
             const toast = document.getElementById('toast');
             toast.innerText = message;
@@ -237,46 +300,44 @@
             }, 3000);
         }
 
-        // Menampilkan Data
         function loadData() {
-            document.getElementById('loader').style.display = 'block'; // Menampilkan loader
+            document.getElementById('loader').style.display = 'block';
             fetch(scriptURL + '?action=read')
                 .then(res => res.json())
                 .then(rows => {
-                    document.getElementById('loader').style.display = 'none'; // Menyembunyikan loader
+                    document.getElementById('loader').style.display = 'none';
                     const tbody = document.querySelector("#dataTable tbody");
                     tbody.innerHTML = '';
                     rows.slice(1).reverse().forEach(row => {
-                        const formattedDate = formatDate(row[1]); // Memformat tanggal
+                        const formattedDate = formatDate(row[1]);
                         const tr = document.createElement('tr');
                         tr.innerHTML = `
-                    <td>${formattedDate}</td>
-                    <td>${row[2]}</td>
-                    <td>${row[3]}</td>
-                    <td>${row[4]}</td>
-                    <td>${row[5]}</td>
-                    <td>${row[6]}</td>
-                `;
+    <td data-label="Tanggal">${formattedDate}</td>
+    <td data-label="Shift">${row[2]}</td>
+    <td data-label="Produk">${row[3]}</td>
+    <td data-label="Jumlah">${row[4]}</td>
+    <td data-label="NG">${row[5]}</td>
+    <td data-label="Keterangan">${row[6]}</td>
+`;
                         tbody.appendChild(tr);
                     });
-                    showToast("Data berhasil dimuat!"); // Menampilkan notifikasi
+                    showToast("Data berhasil dimuat!");
                 });
         }
 
-        // Filter Data Berdasarkan Tanggal
         function filterData() {
-            document.getElementById('loader').style.display = 'block'; // Menampilkan loader
+            document.getElementById('loader').style.display = 'block';
             const selectedDate = document.getElementById('filterDate').value;
             if (!selectedDate) {
                 alert("Pilih tanggal terlebih dahulu!");
-                document.getElementById('loader').style.display = 'none'; // Menyembunyikan loader jika tidak ada tanggal
+                document.getElementById('loader').style.display = 'none';
                 return;
             }
 
             fetch(scriptURL + '?action=read')
                 .then(res => res.json())
                 .then(rows => {
-                    document.getElementById('loader').style.display = 'none'; // Menyembunyikan loader
+                    document.getElementById('loader').style.display = 'none';
                     const tbody = document.querySelector("#dataTable tbody");
                     tbody.innerHTML = '';
                     const filtered = rows.slice(1).filter(row => {
@@ -291,21 +352,20 @@
                             const formattedDate = formatDate(row[1]);
                             const tr = document.createElement('tr');
                             tr.innerHTML = `
-                        <td>${formattedDate}</td>
-                        <td>${row[2]}</td>
-                        <td>${row[3]}</td>
-                        <td>${row[4]}</td>
-                        <td>${row[5]}</td>
-                        <td>${row[6]}</td>
-                    `;
+                                <td>${formattedDate}</td>
+                                <td>${row[2]}</td>
+                                <td>${row[3]}</td>
+                                <td>${row[4]}</td>
+                                <td>${row[5]}</td>
+                                <td>${row[6]}</td>
+                            `;
                             tbody.appendChild(tr);
                         });
                     }
-                    showToast("Data berhasil difilter!"); // Menampilkan notifikasi
+                    showToast("Data berhasil difilter!");
                 });
         }
 
-        // Memuat data saat halaman pertama kali dibuka
         loadData();
     </script>
 </body>
