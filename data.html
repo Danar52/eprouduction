@@ -16,7 +16,6 @@
         body {
             font-family: 'Poppins', sans-serif;
             background-color: #f4f7fa;
-            margin: 0;
             padding: 20px;
             color: #333;
         }
@@ -117,23 +116,37 @@
             position: fixed;
             top: 50%;
             left: 50%;
-            width: 60px;
-            height: 60px;
-            margin: -30px 0 0 -30px;
-            border: 8px solid #f3f3f3;
-            border-top: 8px solid #3498db;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
+            transform: translate(-50%, -50%);
             z-index: 999;
+            display: flex;
+            gap: 8px;
         }
 
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
+        .loader span {
+            width: 12px;
+            height: 12px;
+            background-color: #3498db;
+            border-radius: 50%;
+            animation: bounce 0.6s infinite alternate;
+        }
+
+        .loader span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .loader span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes bounce {
+            from {
+                transform: translateY(0);
+                opacity: 0.3;
             }
 
-            100% {
-                transform: rotate(360deg);
+            to {
+                transform: translateY(-15px);
+                opacity: 1;
             }
         }
 
@@ -184,46 +197,47 @@
         }
 
         @media (max-width: 600px) {
-    .container {
-        padding: 15px;
-    }
+            .container {
+                padding: 15px;
+            }
 
-    h2 {
-        font-size: 18px;
-    }
+            h2 {
+                font-size: 18px;
+            }
 
-    .filter input[type="date"],
-    .btn {
-        width: 100%;
-        font-size: 14px;
-        padding: 10px;
-    }
+            .filter {
+                flex-direction: column;
+                align-items: stretch;
+            }
 
-    .filter {
-        flex-direction: column;
-        gap: 8px;
-    }
+            .filter input[type="date"],
+            .btn {
+                width: 100%;
+                font-size: 13px;
+                padding: 8px;
+            }
 
-    table {
-        font-size: 13px;
-        overflow-x: auto;
-        display: block;
-        white-space: nowrap;
-    }
+            table {
+                font-size: 13px;
+                overflow-x: auto;
+                display: block;
+                white-space: nowrap;
+            }
 
-    th, td {
-        padding: 8px;
-    }
+            th,
+            td {
+                padding: 8px;
+            }
 
-    .link-btn {
-        font-size: 14px;
-    }
+            .link-btn {
+                font-size: 14px;
+            }
 
-    .toast {
-        font-size: 14px;
-        padding: 10px;
-    }
-}
+            .toast {
+                font-size: 14px;
+                padding: 10px;
+            }
+        }
     </style>
 </head>
 
@@ -235,23 +249,30 @@
             <button class="btn" onclick="filterData()">Filter</button>
             <button class="btn secondary" onclick="loadData()">Reset</button>
         </div>
-        <table id="dataTable">
-            <thead>
-                <tr>
-                    <th>Tanggal</th>
-                    <th>Shift</th>
-                    <th>Produk</th>
-                    <th>Jumlah</th>
-                    <th>NG</th>
-                    <th>Keterangan</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
+        <div style="overflow-x:auto;">
+            <table id="dataTable">
+                <thead>
+                    <tr>
+                        <th>Tanggal</th>
+                        <th>Shift</th>
+                        <th>Produk</th>
+                        <th>Jumlah</th>
+                        <th>NG</th>
+                        <th>Keterangan</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
         <a class="link-btn" href="index.html">Input Produksi Baru</a>
     </div>
 
-    <div class="loader" id="loader"></div>
+    <!-- Loader animation -->
+    <div class="loader" id="loader">
+        <span></span><span></span><span></span>
+    </div>
+
+    <!-- Toast notification -->
     <div class="toast" id="toast"></div>
 
     <script>
@@ -274,44 +295,56 @@
             }, 3000);
         }
 
+        function showLoader() {
+            document.getElementById('loader').style.display = 'flex';
+        }
+
+        function hideLoader() {
+            document.getElementById('loader').style.display = 'none';
+        }
+
         function loadData() {
-            document.getElementById('loader').style.display = 'block';
+            showLoader();
             fetch(scriptURL + '?action=read')
                 .then(res => res.json())
                 .then(rows => {
-                    document.getElementById('loader').style.display = 'none';
+                    hideLoader();
                     const tbody = document.querySelector("#dataTable tbody");
                     tbody.innerHTML = '';
                     rows.slice(1).reverse().forEach(row => {
                         const formattedDate = formatDate(row[1]);
                         const tr = document.createElement('tr');
                         tr.innerHTML = `
-    <td data-label="Tanggal">${formattedDate}</td>
-    <td data-label="Shift">${row[2]}</td>
-    <td data-label="Produk">${row[3]}</td>
-    <td data-label="Jumlah">${row[4]}</td>
-    <td data-label="NG">${row[5]}</td>
-    <td data-label="Keterangan">${row[6]}</td>
-`;
+                            <td>${formattedDate}</td>
+                            <td>${row[2]}</td>
+                            <td>${row[3]}</td>
+                            <td>${row[4]}</td>
+                            <td>${row[5]}</td>
+                            <td>${row[6]}</td>
+                        `;
                         tbody.appendChild(tr);
                     });
                     showToast("Data berhasil dimuat!");
+                })
+                .catch(err => {
+                    hideLoader();
+                    alert("Gagal memuat data.");
                 });
         }
 
         function filterData() {
-            document.getElementById('loader').style.display = 'block';
             const selectedDate = document.getElementById('filterDate').value;
             if (!selectedDate) {
                 alert("Pilih tanggal terlebih dahulu!");
-                document.getElementById('loader').style.display = 'none';
                 return;
             }
+
+            showLoader();
 
             fetch(scriptURL + '?action=read')
                 .then(res => res.json())
                 .then(rows => {
-                    document.getElementById('loader').style.display = 'none';
+                    hideLoader();
                     const tbody = document.querySelector("#dataTable tbody");
                     tbody.innerHTML = '';
                     const filtered = rows.slice(1).filter(row => {
@@ -337,9 +370,14 @@
                         });
                     }
                     showToast("Data berhasil difilter!");
+                })
+                .catch(err => {
+                    hideLoader();
+                    alert("Gagal memfilter data.");
                 });
         }
 
+        // Load data awal
         loadData();
     </script>
 </body>
