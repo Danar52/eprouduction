@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <title>Data Produksi</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -15,100 +15,113 @@
 
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: #f4f7fa;
-            padding: 20px;
+            background-color: #f2f4f7;
             color: #333;
+            padding: 20px;
         }
 
         .container {
-            max-width: 800px;
+            max-width: 1000px;
             margin: auto;
             background: #fff;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
         }
 
         h2 {
             text-align: center;
-            color: #2c3e50;
-            margin-bottom: 20px;
+            color: #1e293b;
+            font-size: 26px;
+            margin-bottom: 30px;
         }
 
         .filter {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
-            align-items: center;
+            gap: 12px;
+            justify-content: space-between;
             margin-bottom: 20px;
         }
 
         .filter input[type="date"] {
             flex: 1;
-            padding: 10px;
-            border-radius: 6px;
+            padding: 10px 14px;
+            border-radius: 8px;
             border: 1px solid #ccc;
+            font-size: 14px;
         }
 
         .btn {
-            padding: 8px 14px;
+            padding: 10px 16px;
             border: none;
-            border-radius: 6px;
-            background-color: #3498db;
-            color: white;
-            font-size: 14px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .btn:hover {
-            background-color: #2980b9;
-        }
-
-        .btn.secondary {
-            background-color: #aa0000;
-        }
-
-        .btn.secondary:hover {
-            background-color: #ff3232;
-        }
-
-        .link-btn {
-            display: inline-block;
-            margin-top: 20px;
-            text-align: center;
-            text-decoration: none;
-            color: #3498db;
-            font-weight: bold;
-            padding: 10px;
             border-radius: 8px;
-            transition: background 0.3s;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 14px;
+            transition: 0.3s ease;
         }
 
-        .link-btn:hover {
-            background: #ecf0f1;
+        .btn.primary {
+            background-color: #2563eb;
+            color: white;
+        }
+
+        .btn.primary:hover {
+            background-color: #1d4ed8;
+        }
+
+        .btn.danger {
+            background-color: #ef4444;
+            color: white;
+        }
+
+        .btn.danger:hover {
+            background-color: #dc2626;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
+            border-radius: 12px;
+            overflow: hidden;
         }
 
         th,
         td {
-            border: 1px solid #ddd;
-            padding: 12px;
+            padding: 14px;
             text-align: center;
+            border-bottom: 1px solid #e5e7eb;
         }
 
         th {
-            background-color: #3498db;
+            background-color: #2563eb;
             color: white;
+            font-weight: 600;
         }
 
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
+        tr:hover {
+            background-color: #f1f5f9;
+        }
+
+        .link-btn {
+            display: block;
+            margin: 30px auto 0;
+            width: fit-content;
+            background: none;
+            color: #2563eb;
+            font-weight: bold;
+            text-decoration: none;
+            padding: 10px 16px;
+            border: 2px solid #2563eb;
+            border-radius: 10px;
+            transition: 0.3s ease;
+        }
+
+        .link-btn:hover {
+            background-color: #2563eb;
+            color: white;
         }
 
         .loader {
@@ -118,15 +131,15 @@
             left: 50%;
             transform: translate(-50%, -50%);
             z-index: 999;
-            display: flex;
-            gap: 8px;
         }
 
         .loader span {
-            width: 12px;
-            height: 12px;
-            background-color: #3498db;
+            width: 14px;
+            height: 14px;
+            background-color: #2563eb;
             border-radius: 50%;
+            display: inline-block;
+            margin: 0 4px;
             animation: bounce 0.6s infinite alternate;
         }
 
@@ -152,29 +165,27 @@
 
         .toast {
             visibility: hidden;
-            min-width: 250px;
-            margin: auto;
-            background-color: #2ecc71;
-            color: white;
-            text-align: center;
-            border-radius: 8px;
-            padding: 16px;
             position: fixed;
-            z-index: 1000;
-            left: 0;
-            right: 0;
             top: 30px;
-            font-size: 17px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #10b981;
+            color: white;
+            padding: 14px 24px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 500;
+            z-index: 1000;
         }
 
         .toast.show {
             visibility: visible;
-            animation: fadein 0.5s, fadeout 0.5s 2.5s;
+            animation: fadein 0.4s, fadeout 0.4s 2.6s;
         }
 
         @keyframes fadein {
             from {
-                top: 0;
+                top: 10px;
                 opacity: 0;
             }
 
@@ -191,51 +202,34 @@
             }
 
             to {
-                top: 0;
+                top: 10px;
                 opacity: 0;
             }
         }
 
         @media (max-width: 600px) {
-            .container {
-                padding: 15px;
-            }
-
-            h2 {
-                font-size: 18px;
-            }
-
             .filter {
                 flex-direction: column;
-                align-items: stretch;
-            }
-
-            .filter input[type="date"],
-            .btn {
-                width: 100%;
-                font-size: 13px;
-                padding: 8px;
             }
 
             table {
-                font-size: 13px;
-                overflow-x: auto;
                 display: block;
+                overflow-x: auto;
                 white-space: nowrap;
             }
 
             th,
             td {
-                padding: 8px;
+                font-size: 13px;
+            }
+
+            .btn {
+                width: 100%;
             }
 
             .link-btn {
-                font-size: 14px;
-            }
-
-            .toast {
-                font-size: 14px;
-                padding: 10px;
+                width: 100%;
+                text-align: center;
             }
         }
     </style>
@@ -246,8 +240,8 @@
         <h2>Data Produksi</h2>
         <div class="filter">
             <input type="date" id="filterDate">
-            <button class="btn" onclick="filterData()">Filter</button>
-            <button class="btn secondary" onclick="loadData()">Reset</button>
+            <button class="btn primary" onclick="filterData()">Filter</button>
+            <button class="btn danger" onclick="loadData()">Reset</button>
         </div>
         <div style="overflow-x:auto;">
             <table id="dataTable">
@@ -264,15 +258,13 @@
                 <tbody></tbody>
             </table>
         </div>
-        <a class="link-btn" href="index.html">Input Produksi Baru</a>
+        <a class="link-btn" href="index.html">+ Input Produksi Baru</a>
     </div>
 
-    <!-- Loader animation -->
     <div class="loader" id="loader">
         <span></span><span></span><span></span>
     </div>
 
-    <!-- Toast notification -->
     <div class="toast" id="toast"></div>
 
     <script>
@@ -296,7 +288,7 @@
         }
 
         function showLoader() {
-            document.getElementById('loader').style.display = 'flex';
+            document.getElementById('loader').style.display = 'block';
         }
 
         function hideLoader() {
@@ -311,11 +303,14 @@
                     hideLoader();
                     const tbody = document.querySelector("#dataTable tbody");
                     tbody.innerHTML = '';
+                    if (rows.length < 2) {
+                        tbody.innerHTML = '<tr><td colspan="6">Belum ada data.</td></tr>';
+                        return;
+                    }
                     rows.slice(1).reverse().forEach(row => {
-                        const formattedDate = formatDate(row[1]);
                         const tr = document.createElement('tr');
                         tr.innerHTML = `
-                            <td>${formattedDate}</td>
+                            <td>${formatDate(row[1])}</td>
                             <td>${row[2]}</td>
                             <td>${row[3]}</td>
                             <td>${row[4]}</td>
@@ -328,14 +323,14 @@
                 })
                 .catch(err => {
                     hideLoader();
-                    alert("Gagal memuat data.");
+                    showToast("Gagal memuat data.");
                 });
         }
 
         function filterData() {
             const selectedDate = document.getElementById('filterDate').value;
             if (!selectedDate) {
-                alert("Pilih tanggal terlebih dahulu!");
+                showToast("Pilih tanggal terlebih dahulu.");
                 return;
             }
 
@@ -348,18 +343,16 @@
                     const tbody = document.querySelector("#dataTable tbody");
                     tbody.innerHTML = '';
                     const filtered = rows.slice(1).filter(row => {
-                        const formattedDate = formatDate(row[1]);
-                        return formattedDate === selectedDate;
+                        return formatDate(row[1]) === selectedDate;
                     });
 
                     if (filtered.length === 0) {
                         tbody.innerHTML = '<tr><td colspan="6">Tidak ada data pada tanggal tersebut.</td></tr>';
                     } else {
                         filtered.reverse().forEach(row => {
-                            const formattedDate = formatDate(row[1]);
                             const tr = document.createElement('tr');
                             tr.innerHTML = `
-                                <td>${formattedDate}</td>
+                                <td>${formatDate(row[1])}</td>
                                 <td>${row[2]}</td>
                                 <td>${row[3]}</td>
                                 <td>${row[4]}</td>
@@ -373,11 +366,11 @@
                 })
                 .catch(err => {
                     hideLoader();
-                    alert("Gagal memfilter data.");
+                    showToast("Gagal memfilter data.");
                 });
         }
 
-        // Load data awal
+        // Load data on first load
         loadData();
     </script>
 </body>

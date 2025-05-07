@@ -2,93 +2,80 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Input Produksi</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Input Produksi</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         * {
-            margin: 0;
-            padding: 0;
             box-sizing: border-box;
         }
 
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: #f4f7fa;
-            margin: 0;
+            background-color: #f0f4f8;
             padding: 20px;
-            color: #333;
+            margin: 0;
         }
 
         .container {
-            max-width: 800px;
+            max-width: 500px;
             margin: auto;
-            background: #fff;
+            background: #ffffff;
             padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         }
 
         h2 {
             text-align: center;
+            margin-bottom: 25px;
             color: #2c3e50;
         }
 
-        input,
-        select,
-        textarea {
+        input, select, textarea {
             width: 100%;
             padding: 12px;
-            margin: 10px 0;
-            border-radius: 8px;
+            margin-bottom: 15px;
             border: 1px solid #ccc;
-            transition: all 0.3s;
+            border-radius: 12px;
+            font-size: 14px;
+            transition: all 0.3s ease;
         }
 
-        input:focus,
-        select:focus,
-        textarea:focus {
+        input:focus, select:focus, textarea:focus {
             border-color: #3498db;
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
             outline: none;
         }
 
-        .btn {
-            padding: 12px 20px;
-            border: none;
-            border-radius: 8px;
+        button {
+            width: 100%;
             background-color: #3498db;
             color: white;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
             font-size: 16px;
             cursor: pointer;
-            margin-right: 10px;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s ease;
         }
 
-        .btn:hover {
+        button:hover {
             background-color: #2980b9;
         }
 
-        .btn.secondary {
-            background-color: #7f8c8d;
-        }
-
-        .btn.secondary:hover {
-            background-color: #626c70;
-        }
-
         .link-btn {
-            display: inline-block;
-            margin-top: 20px;
+            display: block;
             text-align: center;
-            text-decoration: none;
+            margin-top: 20px;
             color: #3498db;
             font-weight: bold;
-            padding: 10px;
-            border-radius: 8px;
-            transition: background 0.3s;
+            text-decoration: none;
+            transition: color 0.3s;
         }
 
         .link-btn:hover {
-            background: #ecf0f1;
+            color: #2c3e50;
         }
 
         .loader {
@@ -99,38 +86,31 @@
             width: 60px;
             height: 60px;
             margin: -30px 0 0 -30px;
-            border: 8px solid #f3f3f3;
-            border-top: 8px solid #3498db;
+            border: 6px solid #f3f3f3;
+            border-top: 6px solid #3498db;
             border-radius: 50%;
             animation: spin 1s linear infinite;
-            z-index: 999;
+            z-index: 1000;
         }
 
         @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         .toast {
             visibility: hidden;
-            min-width: 250px;
-            margin: auto;
+            position: fixed;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
             background-color: #2ecc71;
             color: white;
-            text-align: center;
-            border-radius: 8px;
-            padding: 16px;
-            position: fixed;
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
             z-index: 1000;
-            left: 0;
-            right: 0;
-            top: 30px;
-            font-size: 17px;
+            font-size: 14px;
         }
 
         .toast.show {
@@ -139,35 +119,37 @@
         }
 
         @keyframes fadein {
-            from {
-                top: 0;
-                opacity: 0;
-            }
-
-            to {
-                top: 30px;
-                opacity: 1;
-            }
+            from { top: 0; opacity: 0; }
+            to { top: 30px; opacity: 1; }
         }
 
         @keyframes fadeout {
-            from {
-                top: 30px;
-                opacity: 1;
+            from { top: 30px; opacity: 1; }
+            to { top: 0; opacity: 0; }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
             }
 
-            to {
-                top: 0;
-                opacity: 0;
+            h2 {
+                font-size: 20px;
+            }
+
+            button {
+                font-size: 14px;
+                padding: 12px;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>Input Data Produksi</h2>
-        <input type="date" id="tanggal">
+        <h2>Form Input Produksi</h2>
+        <input type="date" id="tanggal" placeholder="Tanggal">
         <select id="shift">
+            <option value="" disabled selected>Pilih Shift</option>
             <option value="1">Shift 1</option>
             <option value="2">Shift 2</option>
             <option value="3">Shift 3</option>
@@ -175,8 +157,8 @@
         <input type="text" id="produk" placeholder="Nama Produk">
         <input type="number" id="jumlah" placeholder="Jumlah Produksi">
         <input type="number" id="ng" placeholder="Jumlah NG">
-        <textarea id="keterangan" placeholder="Keterangan"></textarea>
-        <button class="btn" onclick="submitData()">Submit</button>
+        <textarea id="keterangan" placeholder="Keterangan (opsional)"></textarea>
+        <button onclick="submitData()">Kirim Data</button>
         <a class="link-btn" href="data.html">Lihat Data Produksi</a>
     </div>
 
@@ -198,7 +180,7 @@
             };
 
             const loader = document.getElementById("loader");
-            loader.style.display = "block"; // Menampilkan loader
+            loader.style.display = "block";
 
             const formData = new URLSearchParams(data);
 
@@ -208,16 +190,18 @@
             })
             .then(res => res.text())
             .then(() => {
-                document.querySelectorAll('input, textarea').forEach(el => el.value = ''); // Mengosongkan input
-                loader.style.display = "none"; // Menyembunyikan loader setelah selesai
-                showToast(); // Menampilkan notifikasi toast
+                document.querySelectorAll('input, textarea, select').forEach(el => el.value = '');
+                loader.style.display = "none";
+                showToast();
             });
         }
 
         function showToast() {
             const toast = document.getElementById("toast");
-            toast.className = "toast show"; // Menampilkan toast
-            setTimeout(() => toast.className = "toast", 3000); // Menyembunyikan toast setelah 3 detik
+            toast.classList.add("show");
+            setTimeout(() => {
+                toast.classList.remove("show");
+            }, 3000);
         }
     </script>
 </body>
